@@ -1,6 +1,35 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 function EditProductForm() {
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const params = useParams();
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      await axios.put(`http://localhost:4001/products/${params.id}`, {
+        name: name,
+        price: price,
+        image: imageUrl,
+        description: description,
+      });
+      alert("completed");
+    } catch (error) {
+      alert("Error");
+    }
+  };
+
   return (
-    <form className="product-form">
+    <form
+      className="product-form"
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
       <h1>Edit Product Form</h1>
       <div className="input-container">
         <label>
@@ -10,7 +39,10 @@ function EditProductForm() {
             name="name"
             type="text"
             placeholder="Enter name here"
-            onChange={() => {}}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            value={name}
           />
         </label>
       </div>
@@ -22,7 +54,10 @@ function EditProductForm() {
             name="image"
             type="text"
             placeholder="Enter image url here"
-            onChange={() => {}}
+            onChange={(e) => {
+              setImageUrl(e.target.value);
+            }}
+            value={imageUrl}
           />
         </label>
       </div>
@@ -34,7 +69,10 @@ function EditProductForm() {
             name="price"
             type="number"
             placeholder="Enter price here"
-            onChange={() => {}}
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+            value={price}
           />
         </label>
       </div>
@@ -46,14 +84,17 @@ function EditProductForm() {
             name="description"
             type="text"
             placeholder="Enter description here"
-            onChange={() => {}}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            value={description}
             rows={4}
             cols={30}
           />
         </label>
       </div>
       <div className="form-actions">
-        <button type="submit">Update</button>
+        <button type="submit">Edit</button>
       </div>
     </form>
   );
